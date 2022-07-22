@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -81,4 +82,18 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::post('/unfollow/{id}', [FollowController::class, 'unfollow'])
         ->name('unfollow');
+
+    // Admin
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+
+        // User
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users');
+
+        Route::delete('/users/{id}/deactivate', [UserController::class, 'deactivate'])
+            ->name('users.deactivate');
+
+        Route::post('/users/{id}/activate', [UserController::class, 'activate'])
+            ->name('users.activate');
+    });
 });
