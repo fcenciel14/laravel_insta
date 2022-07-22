@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\CategoryPost;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,13 +66,8 @@ class PostController extends Controller
 
         $this->post->user_id = Auth::user()->id;
         $this->post->description = $request->description;
-        // $this->post->image = $this->saveImage($request);
-        $file_name = time();
-        $extension = $request->image->extension();
-        $file_name_to_store = $file_name . '.' . $extension;
-        $resized_image = Image::make($request->image)->resize(1920, 1080)->encode();
-        Storage::put('public/images/' . $file_name_to_store, $resized_image);
-
+        
+        $file_name_to_store = ImageService::upload($request->image, 'images');
         $this->post->image = $file_name_to_store;
 
         foreach ($request->categories as $category_id) {
