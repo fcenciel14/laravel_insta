@@ -13,11 +13,17 @@
                     <label for="{{ $category->name }}" class="me-2">{{ $category->name }}</label>
                 @endforeach
             </div>
+            @error('categories')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label fw-bold">Description</label>
-            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?"></textarea>
+            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?">{{ old('description') ?? $post->description }}</textarea>
+            @error('description')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
@@ -25,8 +31,11 @@
             <input type="file" name="image" id="image" class="form-control">
             <div class="form-text">
                 Acceptable formats: jpeg, jpg, gif only <br>
-                Max file size is 1048KB
+                Max file size is 2048KB
             </div>
+            @error('image')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary px-5">Post</button>
