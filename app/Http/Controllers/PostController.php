@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\CategoryPost;
@@ -53,13 +54,11 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        // $request->validate([
-        //     'categories' => 'required|array|between:1,3',
-        //     'description' => 'required|min:1|max:1000',
-        //     'image' => 'required|mimes:jpg,png,jpeg,gif|max:1048',
-        // ]);
+        $request->validate([
+            'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
 
         $this->post->user_id = Auth::user()->id;
         $this->post->description = $request->description;
@@ -114,8 +113,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, $id)
     {
+        $request->validate([
+            'image' => 'mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+
         $post = $this->post->findOrFail($id);
         $post->description = $request->description;
 
