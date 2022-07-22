@@ -20,7 +20,6 @@ class PostController extends Controller
     private $category;
     private $category_post;
     private $comment;
-    const LOCAL_STORAGE_FOLDER = 'public/images/';
 
     public function __construct(Post $post, Category $category, CategoryPost $categoryPost, Comment $comment)
     {
@@ -66,7 +65,7 @@ class PostController extends Controller
 
         $this->post->user_id = Auth::user()->id;
         $this->post->description = $request->description;
-        
+
         $file_name_to_store = ImageService::upload($request->image, 'images');
         $this->post->image = $file_name_to_store;
 
@@ -77,13 +76,6 @@ class PostController extends Controller
         $this->post->categoryPost()->createMany($category_post);
         return redirect()->route('index');
 
-    }
-
-    public function saveImage($request)
-    {
-        $image_name = time() . "." . $request->image->extension();
-        $request->image->storeAs(self::LOCAL_STORAGE_FOLDER, $image_name);
-        return $image_name;
     }
 
     /**
@@ -130,10 +122,10 @@ class PostController extends Controller
         $post->description = $request->description;
 
         if ($request->image) {
-            $this->deleteImage($post->image);
-            $post->image = $this->saveImage($request);
+            ImageService::delete($post->image, 'images');
+            $file_name_to_store = ImageService::upload($request->image, 'images');
+            $post->image = $file_name_to_store;
         }
-
         $post->save();
 
         $post->categoryPost()->delete();
@@ -146,16 +138,6 @@ class PostController extends Controller
 
         return redirect()->route('post.show', $id);
     }
-
-    public function deleteImage($image_name)
-    {
-        $image_path = self::LOCAL_STORAGE_FOLDER . $image_name;
-
-        if (Storage::disk('local')->exists($image_path)) {
-            Storage::disk('local')->delete($image_path);
-        }
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -165,7 +147,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = $this->post->findOrFail($id);
-        $this->deleteImage($post->image);
+        ImageService::delete($post->image, 'images');
         $this->post->destroy($id);
 
         return redirect()->route('index');

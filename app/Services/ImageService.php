@@ -17,4 +17,12 @@ class ImageService
 
         return $file_name_to_store;
     }
+
+    public static function delete($old_image, $folder_name)
+    {
+        $image_path = 'public/' . $folder_name . '/' . $old_image;
+        if (Storage::disk('local')->exists($image_path)) {
+            Storage::disk('local')->delete($image_path);
+        }
+    }
 }
