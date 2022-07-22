@@ -33,7 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = $this->post->latest()->paginate(5);
+        $posts = $this->post->latest()->get();
         $users = $this->user->get();
         return view('users.home', compact('posts', 'users'));
     }
