@@ -18,21 +18,33 @@
                     <input type="file" name="avatar" id="avatar" class="form-control">
                 </div>
             </div>
+            @error('avatar')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="name" class="form-label fw-bold d-block">Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $profile->name }}" required>
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') ?? $profile->name }}" required>
+            @error('name')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label fw-bold d-block">Email</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $profile->email }}" required>
+            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') ?? $profile->email }}" required>
+            @error('email')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="introduction" class="form-label fw-bold">Introduction</label>
-            <textarea name="introduction" id="introduction" cols="30" rows="10" class="form-control" placeholder="What kind of person?">{{ $profile->introduction }}</textarea>
+            <textarea name="introduction" id="introduction" cols="30" rows="10" class="form-control" placeholder="What kind of person?">{{ old('introduction') ?? $profile->introduction }}</textarea>
+            @error('introduction')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary d-block w-100">Save</button>
