@@ -31,4 +31,6 @@
             @include('users.posts.contents.suggestions')
         </div>
     </div>
+
+    <script src="{{ mix('js/ajaxlike.js') }}"></script>
 @endsection

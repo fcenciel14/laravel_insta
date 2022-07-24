@@ -33,7 +33,7 @@ class Post extends Model
     }
 
     // check if there is my own account among people who likes the post
-    public function is_liked()
+    public function isLiked()
     {
         return $this->likes()->where('user_id', Auth::id())->exists();
     }

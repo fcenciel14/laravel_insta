@@ -6,6 +6,7 @@ body {
     font-size: 2.5rem;
 }
 
+/* Profile img ------------------------------------- */
 .profile-img {
     width: 160px;
     height: 160px;
@@ -27,4 +28,14 @@ body {
 .list-group-item .profile-img {
     width: 25px;
     height: 25px;
+}
+
+
+/* Like ------------------------------------- */
+.liked {
+    color: red;
+}
+
+.likes {
+    user-select: none;
 }

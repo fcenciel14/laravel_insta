@@ -4,24 +4,18 @@
     </a>
 </div>
 
-<div class="card-body">
-    <div class="my-2 align-items-center">
-        @if ($post->is_liked())
-            <form action="{{ route('post.unlike', $post->id) }}" method="post">
-                @csrf
-                <button type="submit" class="btn btn-sm shadow-none ps-0">
-                    <i class="fa-solid fa-heart text-danger fa-2x"></i>
-                </button>
-                <span>{{ $post->likes->count() }}</span>
-            </form>
+<div class="card-body py-2 px-3">
+    <div class="my-1 align-items-center">
+        @if ($post->isLiked())
+            <span class="likes">
+                <i class="fa-solid fa-heart like-toggle liked" data-postid="{{ $post->id }}"></i>
+                <span class="like-counter">{{ $post->likes_count }}</span>
+            </span>
         @else
-            <form action="{{ route('post.like', $post->id) }}" method="post">
-                @csrf
-                <button type="submit" class="btn btn-sm shadow-none ps-0">
-                    <i class="fa-regular fa-heart fa-2x"></i>
-                </button>
-                <span>{{ $post->likes->count() }}</span>
-            </form>
+            <span class="likes">
+                <i class="fa-solid fa-heart like-toggle" data-postid="{{ $post->id }}"></i>
+                <span class="like-counter">{{ $post->likes_count }}</span>
+            </span>
         @endif
     </div>
 

@@ -11,23 +11,17 @@
         <div class="col-6 bg-white border">
             @include('users.posts.contents.title')
             <div class="card-body">
-                <div class="align-items-center">
-                    @if ($post->is_liked())
-                        <form action="{{ route('post.unlike', $post->id) }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-sm shadow-none ps-0">
-                                <i class="fa-solid fa-heart text-danger fa-2x"></i>
-                            </button>
-                            <span>{{ $post->likes->count() }}</span>
-                        </form>
+                <div class="align-items-center mb-2">
+                    @if ($post->isLiked())
+                        <span class="likes">
+                            <i class="fa-solid fa-heart like-toggle liked" data-postid="{{ $post->id }}"></i>
+                            <span class="like-counter">{{ $post->likes_count }}</span>
+                        </span>
                     @else
-                        <form action="{{ route('post.like', $post->id) }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-sm shadow-none ps-0">
-                                <i class="fa-regular fa-heart fa-2x"></i>
-                            </button>
-                            <span>{{ $post->likes->count() }}</span>
-                        </form>
+                        <span class="likes">
+                            <i class="fa-solid fa-heart like-toggle" data-postid="{{ $post->id }}"></i>
+                            <span class="like-counter">{{ $post->likes_count }}</span>
+                        </span>
                     @endif
                 </div>
 
@@ -74,4 +68,6 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ mix('js/ajaxlike.js') }}"></script>
 @endsection
