@@ -38,4 +38,5 @@ body {
 
 .likes {
     user-select: none;
+    cursor: pointer;
 }
