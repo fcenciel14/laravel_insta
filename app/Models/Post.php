@@ -32,22 +32,7 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
-    // public function is_liked()
-    // {
-    //     $id = Auth::id();
-
-    //     $users = [];
-    //     foreach ($this->likes as $like) {
-    //         array_push($users, $like->user_id);
-    //     }
-
-    //     if (in_array($id, $users)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
+    // check if there is my own account among people who likes the post
     public function is_liked()
     {
         return $this->likes()->where('user_id', Auth::id())->exists();

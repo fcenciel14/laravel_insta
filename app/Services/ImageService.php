@@ -7,6 +7,7 @@ use Intervention\Image\Facades\Image;
 
 class ImageService
 {
+    // resize image
     public static function upload($image_file, $folder_name)
     {
         $file_name = time();
@@ -18,6 +19,7 @@ class ImageService
         return $file_name_to_store;
     }
 
+    // delte image from storage folder
     public static function delete($old_image, $folder_name)
     {
         $image_path = 'public/' . $folder_name . '/' . $old_image;

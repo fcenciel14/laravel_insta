@@ -19,9 +19,6 @@
                         </div>
                     @endif
                 @endforeach
-                <div class="d-flex justify-content-center">
-                    {{ $posts->links() }}
-                </div>
             @else
                 <div class="text-center">
                     <h2>Share Photos</h2>
