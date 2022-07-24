@@ -61,6 +61,7 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'following_id');
     }
 
+    // check if there is my own account among people who follows someone
     public function isFollowed()
     {
         return $this->followers()->where('follower_id', Auth::user()->id)->exists();
