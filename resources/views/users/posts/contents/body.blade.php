@@ -6,7 +6,7 @@
 
 <div class="card-body py-2 px-3">
     <div class="my-1 align-items-center">
-        @if ($post->is_liked())
+        @if ($post->isLiked())
             <span class="likes">
                 <i class="fa-solid fa-heart like-toggle liked" data-postid="{{ $post->id }}"></i>
                 <span class="like-counter">{{ $post->likes_count }}</span>

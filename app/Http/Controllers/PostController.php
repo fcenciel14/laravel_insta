@@ -83,7 +83,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->post->findOrFail($id);
+        $post = $this->post->withCount('likes')->findOrFail($id);
         $comments = $this->comment->latest()->get();
         return view('users.posts.show', compact('post', 'comments'));
     }
