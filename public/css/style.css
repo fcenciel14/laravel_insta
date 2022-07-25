@@ -44,3 +44,9 @@ body {
 .deleteTarget {
     cursor: pointer;
 }
+
+.admin-post-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}

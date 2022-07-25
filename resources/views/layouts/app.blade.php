@@ -80,7 +80,7 @@
 
                                     {{-- Admin controls --}}
                                     <a href="{{ route('admin.users') }}" class="dropdown-item">
-                                        <i class="fa-solid fa-user-gear me-1"></i>Admin
+                                        <i class="fa-solid fa-user-gear"></i>Admin
                                     </a>
 
                                     {{-- Profile --}}
@@ -111,13 +111,13 @@
                     @if (request()->is('admin/*'))
                         <div class="col-3">
                             <div class="list-group">
-                                <a href="" class="list-group-item">
+                                <a href="{{ route('admin.users') }}" class="list-group-item">
                                     <i class="fa-solid fa-users"></i>Users
                                 </a>
-                                <a href="" class="list-group-item">
+                                <a href="{{ route('admin.posts') }}" class="list-group-item">
                                     <i class="fa-solid fa-newspaper"></i>Posts
                                 </a>
-                                <a href="" class="list-group-item">
+                                <a href="{{ route('admin.categories') }}" class="list-group-item">
                                     <i class="fa-solid fa-tags"></i>Categories
                                 </a>
                             </div>

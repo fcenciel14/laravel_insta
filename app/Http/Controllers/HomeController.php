@@ -33,8 +33,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::withCount('likes')->latest()->get();
-        $users = $this->user->get();
+        $posts = $this->post->withCount('likes')->latest()->get();
+        $users = $this->user->withTrashed()->get();
         return view('users.home', compact('posts', 'users'));
     }
 }

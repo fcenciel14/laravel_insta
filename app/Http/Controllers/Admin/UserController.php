@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function activate($id)
     {
-        $user = $this->user->onlyTrashed()->findOrFail($id)->restore();
+        $this->user->onlyTrashed()->findOrFail($id)->restore();
 
         return redirect()->back();
     }

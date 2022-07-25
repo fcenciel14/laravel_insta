@@ -47,6 +47,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::deleting(function ($user) {
+    //         $user->posts()->delete();
+    //     });
+    // }
+
     public function posts() {
         return $this->hasMany(Post::class)->latest();
     }
@@ -71,19 +79,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Follow::class, 'follower_id');
     }
-
-    // public function following()
-    // {
-    //     return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id');
-    // }
-
-    // public function follower()
-    // {
-    //     return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id');
-    // }
-
-    // public function is_followed($id)
-    // {
-    //     return $this->following()->where('follower_id', $id)->exists();
-    // }
 }

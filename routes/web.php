@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
@@ -92,5 +94,25 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::post('/users/{id}/activate', [UserController::class, 'activate'])
             ->name('users.activate');
+
+        // Post
+        Route::get('/posts', [AdminPostController::class, 'index'])
+            ->name('posts');
+
+        Route::delete('/posts/{id}/hide', [AdminPostController::class, 'hide'])
+            ->name('posts.hide');
+
+        Route::post('/posts/{id}/display', [AdminPostController::class, 'display'])
+            ->name('posts.display');
+
+        // Category
+        Route::get('/categories', [CategoryController::class, 'index'])
+            ->name('categories');
+
+        Route::post('/categories/store', [CategoryController::class, 'store'])
+            ->name('categories.store');
+
+        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])
+            ->name('categories.delete');
     });
 });
