@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\Category;
-use App\Models\CategoryPost;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Services\ImageService;
@@ -17,24 +16,13 @@ class PostController extends Controller
 {
     private $post;
     private $category;
-    private $category_post;
     private $comment;
 
-    public function __construct(Post $post, Category $category, CategoryPost $categoryPost, Comment $comment)
+    public function __construct(Post $post, Category $category, Comment $comment)
     {
         $this->post = $post;
         $this->category = $category;
-        $this->category_post = $categoryPost;
         $this->comment = $comment;
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
     }
 
     /**
@@ -45,7 +33,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = $this->category->get();
-        return view('users.posts.create', compact('categories'));
+        return view('users.posts.create')
+            ->with('categories', $categories);
     }
 
     /**
@@ -60,19 +49,19 @@ class PostController extends Controller
             'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
 
+        $file_name_to_store = ImageService::upload($request->image, 'images');
+
         $this->post->user_id = Auth::user()->id;
         $this->post->description = $request->description;
-
-        $file_name_to_store = ImageService::upload($request->image, 'images');
         $this->post->image = $file_name_to_store;
 
         foreach ($request->categories as $category_id) {
             $category_post[] = ['category_id' => $category_id];
         }
+
         $this->post->save();
         $this->post->categoryPost()->createMany($category_post);
         return redirect()->route('index');
-
     }
 
     /**
@@ -85,7 +74,9 @@ class PostController extends Controller
     {
         $post = $this->post->withCount('likes')->findOrFail($id);
         $comments = $this->comment->latest()->get();
-        return view('users.posts.show', compact('post', 'comments'));
+        return view('users.posts.show')
+            ->with('post', $post)
+            ->with('comments', $comments);
     }
 
     /**
@@ -103,7 +94,10 @@ class PostController extends Controller
             $selected_categories[] = $category_post->category_id;
         }
 
-        return view('users.posts.edit', compact('categories', 'post', 'selected_categories'));
+        return view('users.posts.edit')
+            ->with('categories', $categories)
+            ->with('post', $post)
+            ->with('selected_categories', $selected_categories);
     }
 
     /**

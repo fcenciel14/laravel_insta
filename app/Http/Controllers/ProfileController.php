@@ -19,13 +19,15 @@ class ProfileController extends Controller
     public function show($id)
     {
         $profile = $this->user->findOrFail($id);
-        return view('profile.show', compact('profile'));
+        return view('profile.show')
+            ->with('profile', $profile);
     }
 
     public function edit()
     {
         $profile = $this->user->findOrFail(Auth::user()->id);
-        return view('profile.edit', compact('profile'));
+        return view('profile.edit')
+            ->with('profile', $profile);
     }
 
     public function update(Request $request)
@@ -57,12 +59,14 @@ class ProfileController extends Controller
     public function showFollower($id)
     {
         $profile = $this->user->findOrFail($id);
-        return view('profile.follower', compact('profile'));
+        return view('profile.follower')
+            ->with('profile', $profile);
     }
 
     public function showFollowing($id)
     {
         $profile = $this->user->findOrFail($id);
-        return view('profile.following', compact('profile'));
+        return view('profile.following')
+            ->with('profile', $profile);
     }
 }

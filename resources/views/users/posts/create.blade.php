@@ -20,7 +20,7 @@
 
         <div class="mb-3">
             <label for="description" class="form-label fw-bold">Description</label>
-            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?">{{ old('description') ?? $post->description }}</textarea>
+            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?"></textarea>
             @error('description')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
