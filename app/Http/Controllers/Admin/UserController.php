@@ -26,7 +26,6 @@ class UserController extends Controller
     public function deactivate($id)
     {
         $this->user->destroy($id);
-        // $this->user->posts->destroy();
 
         return redirect()->back();
     }
@@ -34,7 +33,6 @@ class UserController extends Controller
     public function activate($id)
     {
         $this->user->onlyTrashed()->findOrFail($id)->restore();
-        // $this->user->onlyTrashed()->findOrFail($id)->posts->restore();
 
         return redirect()->back();
     }

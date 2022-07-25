@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Post;
 use App\Models\Like;
+use App\Models\Comment;
 use App\Models\Follow;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,10 +55,14 @@ class User extends Authenticatable
 
         static::deleted(function ($users) {
             $users->posts()->delete();
+            $users->comments()->delete();
+            $users->likes()->delete();
         });
 
         static::restoring(function($users) {
             $users->posts()->withTrashed()->where('deleted_at', '>=', $users->deleted_at)->restore();
+            $users->comments()->withTrashed()->restore();
+            $users->likes()->withTrashed()->restore();
         });
     }
 
@@ -69,6 +74,11 @@ class User extends Authenticatable
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function followers()
