@@ -37,7 +37,7 @@
         </div>
 
         <div class="mb-3">
-            <img src="{{ asset('/storage/images/' . $post->image) }}" alt="{{ $post->image }}" style="height: 150px; width: 150px;" class="img-thumbnail mb-3">
+            <img src="{{ asset('/storage/images/' . $post->image) }}" alt="{{ $post->image }}" class="img-thumbnail mb-3 w-25">
             <label for="image" class="form-label fw-bold d-block">Image</label>
             <input type="file" name="image" id="image" class="form-control">
             <div class="form-text">

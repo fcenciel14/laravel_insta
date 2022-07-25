@@ -3,7 +3,7 @@
         <hr>
         @foreach ($post->comments->take(3) as $comment)
                 <div class="bg-white mb-2 p-2 rounded border comment">
-                    <a href="" class="text-decoration-none text-dark fw-bold">{{ $comment->user->name }}</a>
+                    <a href="{{ route('profile.show', $comment->user->id) }}" class="text-decoration-none text-dark fw-bold">{{ $comment->user->name }}</a>
                     <p class="m-0 fw-light">{{ $comment->body }}</p>
                     <div class="row">
                         <div class="col">
