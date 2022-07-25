@@ -33,4 +33,5 @@
     </div>
 
     <script src="{{ mix('js/ajaxlike.js') }}"></script>
+    <script src="{{ mix('js/delete_comment.js') }}"></script>
 @endsection

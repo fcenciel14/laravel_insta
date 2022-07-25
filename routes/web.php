@@ -47,15 +47,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('/post/destroy/{id}', [PostController::class, 'destroy'])
         ->name('post.destroy');
 
-    Route::post('/post/like', [LikeController::class, 'like'])
+    Route::post('/post/like', [LikeController::class, 'like']) // Ajax
         ->name('post.like');
 
     // Comment
     Route::post('/{post_id}/comment/store', [CommentController::class, 'store'])
         ->name('comment.store');
 
-    Route::delete('/comment/destroy/{id}', [CommentController::class, 'destroy'])
-        ->name('comment.destroy');
+    Route::delete('/comment/delete', [CommentController::class, 'destroy']) // Ajax
+        ->name('comment.delete');
 
     // Profile
     Route::get('/profile/show/{id}', [ProfileController::class, 'show'])

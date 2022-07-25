@@ -40,3 +40,7 @@ body {
     user-select: none;
     cursor: pointer;
 }
+
+.deleteTarget {
+    cursor: pointer;
+}

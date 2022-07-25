@@ -2,23 +2,18 @@
     @if ($post->comments->isNotEmpty())
         <hr>
         @foreach ($post->comments->take(3) as $comment)
-                <div class="bg-white mb-2 p-2 rounded border">
+                <div class="bg-white mb-2 p-2 rounded border comment">
                     <a href="" class="text-decoration-none text-dark fw-bold">{{ $comment->user->name }}</a>
-                    &nbsp; <p class="m-0 fw-light">{{ $comment->body }}</p>
+                    <p class="m-0 fw-light">{{ $comment->body }}</p>
                     <div class="row">
                         <div class="col">
-                            {{-- <p class="text-muted m-0">{{ $comment->created_at->format('Y-m-d') }}</p> --}}
                             <p class="text-muted m-0">{{ date("D, M d Y", strtotime($comment->created_at)) }}</p>
                         </div>
-                        @if ($comment->user_id === Auth::user()->id) {{--  || $comment->user->id === $post->user->id --}}
-                            <div class="col text-end">
-                                <form action="{{ route('comment.destroy', $comment->id) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn text-danger p-0">Delete</button>
-                                </form>
-                            </div>
-                        @endif
+                        <div class="col text-end">
+                            @if ($comment->user_id === Auth::user()->id)
+                                <span class="text-danger deleteTarget" data-commentid="{{ $comment->id }}">Delete</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
         @endforeach
@@ -36,4 +31,5 @@
             <small class="text-danger">{{ $message }}</small>
         @enderror
     </form>
+
 </div>

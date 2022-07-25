@@ -44,22 +44,18 @@
                 </form>
                 @if ($post->comments->isNotEmpty())
                     @foreach ($post->comments as $comment)
-                        <div class="bg-white mb-2">
+                        <div class="bg-white mb-2 comment">
                             <a href="" class="text-decoration-none text-dark fw-bold">{{ $comment->user->name }}</a>
-                            &nbsp; <p class="fw-light text-break m-0">{{ $comment->body }}</p>
+                            <p class="fw-light text-break m-0">{{ $comment->body }}</p>
                             <div class="row">
                                 <div class="col">
                                     <p class="text-muted m-0">{{ $comment->created_at->format('Y-m-d') }}</p>
                                 </div>
-                                @if ($comment->user_id === Auth::user()->id)
-                                    <div class="col text-end">
-                                        <form action="{{ route('comment.destroy', $comment->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn text-danger p-0">Delete</button>
-                                        </form>
-                                    </div>
-                                @endif
+                                <div class="col text-end">
+                                    @if ($comment->user_id === Auth::user()->id)
+                                        <span class="text-danger deleteTarget" data-commentid="{{ $comment->id }}">Delete</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -70,4 +66,5 @@
     </div>
 
     <script src="{{ mix('js/ajaxlike.js') }}"></script>
+    <script src="{{ mix('js/delete_comment.js')}}"></script>
 @endsection
