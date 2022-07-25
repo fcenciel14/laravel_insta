@@ -32,5 +32,8 @@
             <textarea name="comment" id="comment" cols="30" rows="1" class="form-control form-control-sm" placeholder="Add a comment..."></textarea>
             <button type="submit" class="btn btn-sm btn-outline-secondary">Post</button>
         </div>
+        @error('comment')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
     </form>
 </div>

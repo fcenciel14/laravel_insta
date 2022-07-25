@@ -42,14 +42,15 @@ class CommentController extends Controller
      */
     public function store(Request $request, $post_id)
     {
-        // $request->validate([
-        //     'comment' => 'required|min:1|max:150',
-        // ]);
+        $request->validate([
+            'comment' => 'required|min:1|max:150',
+        ]);
 
-        $this->comment->user_id = Auth::user()->id;
-        $this->comment->post_id = $post_id;
-        $this->comment->body = $request->comment;
-        $this->comment->save();
+        $this->comment->create([
+            'user_id' => Auth::user()->id,
+            'post_id' => $post_id,
+            'body' => $request->comment,
+        ]);
 
         return redirect()->back();
     }
@@ -96,9 +97,7 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        // $this->comment->destroy($id);
-        $comment = $this->comment->where('user_id', Auth::user()->id)->where('id', $id);
-        $comment->delete();
+        $this->comment->where('user_id', Auth::user()->id)->where('id', $id)->delete();
 
         return redirect()->back();
     }
