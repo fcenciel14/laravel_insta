@@ -47,13 +47,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-    //     static::deleting(function ($user) {
-    //         $user->posts()->delete();
-    //     });
-    // }
+    // soft delete and restore the relational posts simultaneously
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($users) {
+            $users->posts()->delete();
+        });
+
+        static::restoring(function($users) {
+            $users->posts()->withTrashed()->where('deleted_at', '>=', $users->deleted_at)->restore();
+        });
+    }
+
 
     public function posts() {
         return $this->hasMany(Post::class)->latest();

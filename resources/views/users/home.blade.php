@@ -6,7 +6,7 @@
         <div class="col-8">
             @if ($posts->isNotEmpty())
                 @foreach ($posts as $post)
-                    @if ($post->user->isFollowed() || $post->user->id === Auth::user()->id || $post->user->trashed() )
+                    @if ($post->user->isFollowed() || $post->user->id === Auth::user()->id)
                         <div class="card mb-4">
                             {{-- title --}}
                                 @include('users.posts.contents.title')
