@@ -77,7 +77,11 @@
                                 </button>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+
                                     {{-- Admin controls --}}
+                                    <a href="{{ route('admin.users') }}" class="dropdown-item">
+                                        <i class="fa-solid fa-user-gear"></i>Admin
+                                    </a>
 
                                     {{-- Profile --}}
                                     <a href="{{ route('profile.show', Auth::user()->id)}}" class="dropdown-item">
@@ -103,10 +107,22 @@
         <main class="py-4">
             <div class="container">
                 <div class="row justify-content-center">
-                    {{-- For admin controls
-                    <div class="col-3">
-
-                    </div> --}}
+                    {{-- For admin controls --}}
+                    @if (request()->is('admin/*'))
+                        <div class="col-3">
+                            <div class="list-group">
+                                <a href="{{ route('admin.users') }}" class="list-group-item">
+                                    <i class="fa-solid fa-users"></i>Users
+                                </a>
+                                <a href="{{ route('admin.posts') }}" class="list-group-item">
+                                    <i class="fa-solid fa-newspaper"></i>Posts
+                                </a>
+                                <a href="{{ route('admin.categories') }}" class="list-group-item">
+                                    <i class="fa-solid fa-tags"></i>Categories
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-9">
                         @yield('content')
                     </div>

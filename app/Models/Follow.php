@@ -16,11 +16,13 @@ class Follow extends Model
 
     public $timestamps = false;
 
+    // get information of the follower (following you)
     public function getFollower()
     {
         return $this->belongsTo(User::class, 'follower_id', 'id');
     }
 
+    // get information of the following person (the person who you are following)
     public function getFollowing()
     {
         return $this->belongsTo(User::class, 'following_id', 'id');

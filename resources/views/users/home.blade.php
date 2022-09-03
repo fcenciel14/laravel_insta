@@ -19,9 +19,6 @@
                         </div>
                     @endif
                 @endforeach
-                <div class="d-flex justify-content-center">
-                    {{ $posts->links() }}
-                </div>
             @else
                 <div class="text-center">
                     <h2>Share Photos</h2>
@@ -34,4 +31,7 @@
             @include('users.posts.contents.suggestions')
         </div>
     </div>
+
+    <script src="{{ mix('js/ajaxlike.js') }}"></script>
+    <script src="{{ mix('js/delete_comment.js') }}"></script>
 @endsection

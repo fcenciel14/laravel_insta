@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
@@ -46,18 +49,15 @@ Route::group(['middleware' => 'auth'], function() {
     Route::delete('/post/destroy/{id}', [PostController::class, 'destroy'])
         ->name('post.destroy');
 
-    Route::post('/post/{id}/like', [LikeController::class, 'like'])
+    Route::post('/post/like', [LikeController::class, 'like']) // Ajax
         ->name('post.like');
-
-    Route::post('/post/{id}/unlike', [LikeController::class, 'unlike'])
-        ->name('post.unlike');
 
     // Comment
     Route::post('/{post_id}/comment/store', [CommentController::class, 'store'])
         ->name('comment.store');
 
-    Route::delete('/comment/destroy/{id}', [CommentController::class, 'destroy'])
-        ->name('comment.destroy');
+    Route::delete('/comment/delete', [CommentController::class, 'destroy']) // Ajax
+        ->name('comment.delete');
 
     // Profile
     Route::get('/profile/show/{id}', [ProfileController::class, 'show'])
@@ -81,4 +81,38 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::post('/unfollow/{id}', [FollowController::class, 'unfollow'])
         ->name('unfollow');
+
+    // Admin
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+
+        // User
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users');
+
+        Route::delete('/users/{id}/deactivate', [UserController::class, 'deactivate'])
+            ->name('users.deactivate');
+
+        Route::post('/users/{id}/activate', [UserController::class, 'activate'])
+            ->name('users.activate');
+
+        // Post
+        Route::get('/posts', [AdminPostController::class, 'index'])
+            ->name('posts');
+
+        Route::delete('/posts/{id}/hide', [AdminPostController::class, 'hide'])
+            ->name('posts.hide');
+
+        Route::post('/posts/{id}/display', [AdminPostController::class, 'display'])
+            ->name('posts.display');
+
+        // Category
+        Route::get('/categories', [CategoryController::class, 'index'])
+            ->name('categories');
+
+        Route::post('/categories/store', [CategoryController::class, 'store'])
+            ->name('categories.store');
+
+        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])
+            ->name('categories.delete');
+    });
 });

@@ -21,24 +21,35 @@ class UserSeeder extends Seeder
                 'email' => 'test@test.com',
                 'avatar' => 'sample1.jpg',
                 'password' => Hash::make('password'),
+                'created_at' => '2022/01/01 11:11:11',
             ],
             [
                 'name' => 'test1',
                 'email' => 'test1@test.com',
                 'avatar' => 'sample2.jpg',
                 'password' => Hash::make('password'),
+                'created_at' => '2022/01/01 11:11:11',
             ],
             [
                 'name' => 'test2',
                 'email' => 'test2@test.com',
                 'avatar' => 'sample3.jpg',
                 'password' => Hash::make('password'),
+                'created_at' => '2022/01/01 11:11:11',
             ],
             [
                 'name' => 'test3',
-                'email' => 'tes3@test.com',
+                'email' => 'test3@test.com',
                 'avatar' => 'sample4.jpg',
                 'password' => Hash::make('password'),
+                'created_at' => '2022/01/01 11:11:11',
+            ],
+            [
+                'name' => 'test4',
+                'email' => 'test4@test.com',
+                'avatar' => null,
+                'password' => Hash::make('password'),
+                'created_at' => '2022/01/01 11:11:11',
             ],
         ]);
     }

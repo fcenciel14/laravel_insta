@@ -6,15 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comment;
 use App\Models\Like;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'description',
+        'image',
+    ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function categoryPost()
@@ -32,23 +39,8 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
-    // public function is_liked()
-    // {
-    //     $id = Auth::id();
-
-    //     $users = [];
-    //     foreach ($this->likes as $like) {
-    //         array_push($users, $like->user_id);
-    //     }
-
-    //     if (in_array($id, $users)) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    public function is_liked()
+    // check if there is my own account among people who likes the post
+    public function isLiked()
     {
         return $this->likes()->where('user_id', Auth::id())->exists();
     }

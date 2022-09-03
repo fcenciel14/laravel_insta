@@ -2,39 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use App\Models\Category;
-use App\Models\CategoryPost;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     private $post;
     private $category;
-    private $category_post;
     private $comment;
-    const LOCAL_STORAGE_FOLDER = 'public/images/';
 
-    public function __construct(Post $post, Category $category, CategoryPost $categoryPost, Comment $comment)
+    public function __construct(Post $post, Category $category, Comment $comment)
     {
         $this->post = $post;
         $this->category = $category;
-        $this->category_post = $categoryPost;
         $this->comment = $comment;
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
     }
 
     /**
@@ -45,7 +33,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = $this->category->get();
-        return view('users.posts.create', compact('categories'));
+        return view('users.posts.create')
+            ->with('categories', $categories);
     }
 
     /**
@@ -54,32 +43,25 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        // $request->validate([
-        //     'categories' => 'required|array|between:1,3',
-        //     'description' => 'required|min:1|max:1000',
-        //     'image' => 'required|mimes:jpg,png,jpeg,gif|max:1048',
-        // ]);
+        $request->validate([
+            'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+
+        $file_name_to_store = ImageService::upload($request->image, 'images');
 
         $this->post->user_id = Auth::user()->id;
         $this->post->description = $request->description;
-        $this->post->image = $this->saveImage($request);
+        $this->post->image = $file_name_to_store;
 
         foreach ($request->categories as $category_id) {
             $category_post[] = ['category_id' => $category_id];
         }
+
         $this->post->save();
         $this->post->categoryPost()->createMany($category_post);
         return redirect()->route('index');
-
-    }
-
-    public function saveImage($request)
-    {
-        $image_name = time() . "." . $request->image->extension();
-        $request->image->storeAs(self::LOCAL_STORAGE_FOLDER, $image_name);
-        return $image_name;
     }
 
     /**
@@ -90,9 +72,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->post->findOrFail($id);
+        $post = $this->post->withCount('likes')->findOrFail($id);
         $comments = $this->comment->latest()->get();
-        return view('users.posts.show', compact('post', 'comments'));
+        return view('users.posts.show')
+            ->with('post', $post)
+            ->with('comments', $comments);
     }
 
     /**
@@ -110,7 +94,10 @@ class PostController extends Controller
             $selected_categories[] = $category_post->category_id;
         }
 
-        return view('users.posts.edit', compact('categories', 'post', 'selected_categories'));
+        return view('users.posts.edit')
+            ->with('categories', $categories)
+            ->with('post', $post)
+            ->with('selected_categories', $selected_categories);
     }
 
     /**
@@ -120,16 +107,20 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, $id)
     {
+        $request->validate([
+            'image' => 'mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+
         $post = $this->post->findOrFail($id);
         $post->description = $request->description;
 
         if ($request->image) {
-            $this->deleteImage($post->image);
-            $post->image = $this->saveImage($request);
+            ImageService::delete($post->image, 'images');
+            $file_name_to_store = ImageService::upload($request->image, 'images');
+            $post->image = $file_name_to_store;
         }
-
         $post->save();
 
         $post->categoryPost()->delete();
@@ -142,16 +133,6 @@ class PostController extends Controller
 
         return redirect()->route('post.show', $id);
     }
-
-    public function deleteImage($image_name)
-    {
-        $image_path = self::LOCAL_STORAGE_FOLDER . $image_name;
-
-        if (Storage::disk('local')->exists($image_path)) {
-            Storage::disk('local')->delete($image_path);
-        }
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -161,7 +142,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = $this->post->findOrFail($id);
-        $this->deleteImage($post->image);
+        ImageService::delete($post->image, 'images');
         $this->post->destroy($id);
 
         return redirect()->route('index');

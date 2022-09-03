@@ -23,21 +23,30 @@
                     @endif
                 @endforeach
             </div>
+            @error('categories')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label fw-bold">Description</label>
-            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?">{{ $post->description }}</textarea>
+            <textarea name="description" id="description" cols="30" rows="10" class="form-control" placeholder="What's on you mind?">{{ old('description') ?? $post->description }}</textarea>
+            @error('description')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <img src="{{ asset('/storage/images/' . $post->image) }}" alt="{{ $post->image }}" style="height: 150px; width: 150px;" class="img-thumbnail mb-3">
+            <img src="{{ asset('/storage/images/' . $post->image) }}" alt="{{ $post->image }}" class="img-thumbnail mb-3 w-25">
             <label for="image" class="form-label fw-bold d-block">Image</label>
             <input type="file" name="image" id="image" class="form-control">
             <div class="form-text">
                 Acceptable formats: jpeg, jpg, gif only <br>
                 Max file size is 1048KB
             </div>
+            @error('image')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary px-5">Post</button>

@@ -11,23 +11,17 @@
         <div class="col-6 bg-white border">
             @include('users.posts.contents.title')
             <div class="card-body">
-                <div class="align-items-center">
-                    @if ($post->is_liked())
-                        <form action="{{ route('post.unlike', $post->id) }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-sm shadow-none ps-0">
-                                <i class="fa-solid fa-heart text-danger fa-2x"></i>
-                            </button>
-                            <span>{{ $post->likes->count() }}</span>
-                        </form>
+                <div class="align-items-center mb-2">
+                    @if ($post->isLiked())
+                        <span class="likes">
+                            <i class="fa-solid fa-heart like-toggle liked" data-postid="{{ $post->id }}"></i>
+                            <span class="like-counter">{{ $post->likes_count }}</span>
+                        </span>
                     @else
-                        <form action="{{ route('post.like', $post->id) }}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-sm shadow-none ps-0">
-                                <i class="fa-regular fa-heart fa-2x"></i>
-                            </button>
-                            <span>{{ $post->likes->count() }}</span>
-                        </form>
+                        <span class="likes">
+                            <i class="fa-solid fa-heart like-toggle" data-postid="{{ $post->id }}"></i>
+                            <span class="like-counter">{{ $post->likes_count }}</span>
+                        </span>
                     @endif
                 </div>
 
@@ -50,22 +44,18 @@
                 </form>
                 @if ($post->comments->isNotEmpty())
                     @foreach ($post->comments as $comment)
-                        <div class="bg-white mb-2">
+                        <div class="bg-white mb-2 comment">
                             <a href="" class="text-decoration-none text-dark fw-bold">{{ $comment->user->name }}</a>
-                            &nbsp; <p class="fw-light text-break m-0">{{ $comment->body }}</p>
+                            <p class="fw-light text-break m-0">{{ $comment->body }}</p>
                             <div class="row">
                                 <div class="col">
                                     <p class="text-muted m-0">{{ $comment->created_at->format('Y-m-d') }}</p>
                                 </div>
-                                @if ($comment->user_id === Auth::user()->id)
-                                    <div class="col text-end">
-                                        <form action="{{ route('comment.destroy', $comment->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn text-danger p-0">Delete</button>
-                                        </form>
-                                    </div>
-                                @endif
+                                <div class="col text-end">
+                                    @if ($comment->user_id === Auth::user()->id)
+                                        <span class="text-danger deleteTarget" data-commentid="{{ $comment->id }}">Delete</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -74,4 +64,7 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ mix('js/ajaxlike.js') }}"></script>
+    <script src="{{ mix('js/delete_comment.js')}}"></script>
 @endsection

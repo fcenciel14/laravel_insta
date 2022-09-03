@@ -1,4 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/ajaxlike.js": "/js/ajaxlike.js",
+    "/js/delete_comment.js": "/js/delete_comment.js",
     "/css/app.css": "/css/app.css"
 }

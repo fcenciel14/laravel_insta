@@ -14,92 +14,27 @@ class CommentController extends Controller
     {
         $this->comment = $comment;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request, $post_id)
     {
-        // $request->validate([
-        //     'comment' => 'required|min:1|max:150',
-        // ]);
+        $request->validate([
+            'comment' => 'required|min:1|max:150',
+        ]);
 
-        $this->comment->user_id = Auth::user()->id;
-        $this->comment->post_id = $post_id;
-        $this->comment->body = $request->comment;
-        $this->comment->save();
-
-        return redirect()->back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        // $this->comment->destroy($id);
-        $comment = $this->comment->where('user_id', Auth::user()->id)->where('id', $id);
-        $comment->delete();
+        $this->comment->create([
+            'user_id' => Auth::user()->id,
+            'post_id' => $post_id,
+            'body' => $request->comment,
+        ]);
 
         return redirect()->back();
+    }
+
+    public function destroy(Request $request)
+    {
+        $this->comment->where('user_id', Auth::user()->id)->where('id', $request->id)->delete();
+        return response()->json([
+            'message' => 'Comment deleted successfully',
+        ]);
     }
 }
